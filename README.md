@@ -6,7 +6,7 @@ The first intent of this image is to provide the ability to use Podman from a co
 
 ## Environment
 
-I'm used to work with [Fedora CoreOS](https://getfedora.org/fr/coreos?stream=stable) and I didn't try on another system, that should work in the same way...
+I'm used to work with [Fedora CoreOS](https://getfedora.org/fr/coreos?stream=stable) and I didn't try on another system, that should work in the same way with some adjustments...
 
 ## Building the image
 
@@ -60,7 +60,7 @@ Type=forking
 WantedBy=multi-user.target
 ```
 
-you can notice the `-v /tmp/podman-agent.sock:/run/podman/podman.sock` that will be driven by the `podman-remote-static` downloaded in Dockerfile
+you can notice the `-v /tmp/podman-agent.sock:/run/podman/podman.sock` that will be driven by the `podman-remote-static` downloaded in Dockerfile and moved to `/bin/podman`
 
 For further reading or inspiration or Reverse engineering ^^ how I went here you can look at the `notes.md` file
 
@@ -116,7 +116,27 @@ Everything should be nice now :
 
 You should be able to see your agent connected on its status page on Jenkins
 
-Create a new test job like that :
+## check if your container is working fine
+
+Check with `sudo systemctl status jenkins-agent.service podman.socket` if status is `active (running)` and `active (listening)`
+Check with `sudo podman ps` if your container is up and running
+Check with `sudo podman exec jenkins-agent podman system info` if you can see infos like e.g. :
+
+``` text
+host:
+[...]
+  distribution:
+    distribution: fedora
+    variant: coreos
+    version: "36"
+[...]
+  remoteSocket:
+    exists: true
+    path: /tmp/podman-agent.sock
+[...]
+```
+
+Create a new test job in jenkins like that and mak it run on your new agent :
 
 ``` groovy
 pipeline{
