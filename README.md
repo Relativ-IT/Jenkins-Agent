@@ -18,7 +18,7 @@ Connect to your.jenkins.instance:port and go to menu 'manage Jenkins/Manage node
 
 Create a node called `Nodename` (up to you) with "launch method" : `Launch agent by connecting it to the controller` and check the option `Use WebSocket`
 
-Add `/home/jenkins/` as the `Remote root directory` option
+Add `/home/jenkins/` as the `Remote root directory` option.
 You can add labels like `linux podman` in order to select this agent in your pipelines as shown in the following example.
 
 On status page of your newly created agent, you should be able to find the secret key provided by Jenkins for this agent.
