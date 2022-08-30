@@ -116,9 +116,9 @@ Everything should be nice now :
 
 You should be able to see your agent connected on its status page on Jenkins
 
-## check if your container is working fine
+## Check if your container is working fine
 
-- Check with `sudo systemctl status jenkins-agent.service podman.socket` if status is `active (running)` and `active (listening)`
+- Check with `sudo systemctl status jenkins-agent.service podman.socket` if status are `active (running)` and `active (listening)`
 - Check with `sudo podman ps` if your container is up and running
 - Check with `sudo podman exec jenkins-agent podman system info` if you can see infos like e.g. :
 
