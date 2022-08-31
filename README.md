@@ -157,3 +157,7 @@ pipeline{
   }
 }
 ```
+
+## Conclusion
+
+This image is building itself as you can suppose by looking at the `Jenkinsfile` :relaxed:
