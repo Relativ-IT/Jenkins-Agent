@@ -5,7 +5,7 @@ pipeline {
   }
 
   environment{
-    REGISTRY = "registry.einstein.relativit:5000"
+    REGISTRY = credentials('registry-server')
     IMAGE = "jenkins-agent"
     TAG = "latest"
     FULLIMAGE = "${env.REGISTRY}/${env.IMAGE}:${env.TAG}"
