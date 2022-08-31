@@ -21,17 +21,13 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh '''
-          podman build --pull -t $FULLIMAGE .
-        '''
+        sh ('podman build --pull -t $FULLIMAGE .')
       }
     }
 
     stage('Pushing image') {
       steps {
-        sh '''
-          podman push $FULLIMAGE
-        '''
+        sh ('podman push $FULLIMAGE')
       }
     }
   }
