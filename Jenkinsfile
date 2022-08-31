@@ -44,7 +44,7 @@ pipeline {
       slackSend color: "danger", message: "${env.JOB_NAME} build failed :poop: !"
     }
     cleanup {
-      cleanWs(deleteDirs: true, patterns: [[pattern: ARTEFACTS, type: 'INCLUDE'], [pattern: ARTEFACTS_PATH, type: 'INCLUDE']])
+      cleanWs()
     }
   }
 }
