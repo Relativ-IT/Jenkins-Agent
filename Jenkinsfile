@@ -8,7 +8,7 @@ pipeline {
     REGISTRY = credentials('registry-server')
     IMAGE = "jenkins-agent"
     TAG = "latest"
-    FULLIMAGE = "${env.REGISTRY}/${env.IMAGE}:${env.TAG}"
+    FULLIMAGE = "${env.IMAGE}:${env.TAG}"
   }
 
   stages {
@@ -21,13 +21,13 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh ('podman build --pull -t $FULLIMAGE .')
+        sh 'podman build --pull -t $REGISTRY/$FULLIMAGE .'
       }
     }
 
     stage('Pushing image') {
       steps {
-        sh ('podman push $FULLIMAGE')
+        sh 'podman push $REGISTRY/$FULLIMAGE'
       }
     }
   }
