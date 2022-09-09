@@ -1,4 +1,5 @@
 pipeline {
+  
   triggers {
     cron(env.BRANCH_NAME == 'main' ? '@weekly' : '')
   }
