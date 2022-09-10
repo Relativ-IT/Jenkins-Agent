@@ -44,6 +44,11 @@ pipeline {
       slackSend color: "danger", message: "${env.JOB_NAME} build failed :poop: !"
     }
     cleanup {
+      sh '''
+        podman container prune --force
+        podman volume prune --force
+        podman image prune --force
+      '''
       cleanWs()
     }
   }
