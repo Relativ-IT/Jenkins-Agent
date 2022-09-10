@@ -47,7 +47,7 @@ pipeline {
       sh '''
         podman container prune --force
         podman volume prune --force
-        podman image prune --force
+        podman image prune --all --force
       '''
       cleanWs()
     }
