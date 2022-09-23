@@ -23,7 +23,7 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh 'podman build --pull -t $REGISTRY/$FULLIMAGE .'
+        sh 'podman build --pull --platform linux/amd64 -t $REGISTRY/$FULLIMAGE .'
       }
     }
 
