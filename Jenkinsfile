@@ -4,7 +4,7 @@ pipeline {
   }
 
   agent {
-    label 'Linux' && 'Podman'
+    label 'Linux && Podman'
   }
 
   environment{
@@ -38,9 +38,11 @@ pipeline {
     success {
       slackSend color: "#4675b1", message: "${env.JOB_NAME} successfully built :blue_heart: !"
     }
+
     failure {
       slackSend color: "danger", message: "${env.JOB_NAME} build failed :poop: !"
     }
+    
     cleanup {
       sh '''
         podman container prune --force
