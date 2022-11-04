@@ -31,7 +31,12 @@ pipeline {
 
         stage('Print Podman infos') {
           steps {
-            sh 'podman info'
+            sh '''
+              echo 'podman remote verion'
+              podman --version
+              echo 'podman remote socket info'
+              podman system info
+              '''
           }
         }
       }
