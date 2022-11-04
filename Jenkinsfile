@@ -15,9 +15,25 @@ pipeline {
   }
 
   stages {
-    stage('Advertising start of build'){
-      steps{
-        slackSend color: "#4675b1", message: "${env.JOB_NAME} build #${env.BUILD_NUMBER} started :fire: (<${env.RUN_DISPLAY_URL}|Open>)"
+    stage('Initialize') {
+      parallel {
+        stage('Advertising start of build'){
+          steps{
+            slackSend color: "#4675b1", message: "${env.JOB_NAME} build #${env.BUILD_NUMBER} started :fire: (<${env.RUN_DISPLAY_URL}|Open>)"
+          }
+        }
+
+        stage('Print environments variables') {
+          steps {
+            sh 'printenv'
+          }
+        }
+
+        stage('Print Podman infos') {
+          steps {
+            sh 'podman info'
+          }
+        }
       }
     }
 
