@@ -175,7 +175,7 @@ Create a new test job in jenkins like that and make it run on your new agent :
 pipeline{
 
   agent {
-    label 'linux' && 'podman'
+    label 'Linux && Podman'
   }
   
   stages{
