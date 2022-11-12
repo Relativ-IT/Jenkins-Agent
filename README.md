@@ -10,7 +10,7 @@ I'm used to work with [Fedora CoreOS](https://getfedora.org/fr/coreos?stream=sta
 
 ## Building the image
 
-Did you really need this section ? well, run `podman build --pull -t jenkins-agent:latest .` in your working directory with the Dockerfile.
+Did you really need this section ? well, run `podman build --pull -t jenkins-agent:latest .` in your working directory with the Containerfile.
 
 ## Prepare Jenkins
 
@@ -53,7 +53,23 @@ After=network-online.target
 Environment=PODMAN_SYSTEMD_UNIT=%n
 Environment=SECRET=yourabsolutelysecretkeyfromjenkinsitself
 Restart=on-failure
-ExecStart=/usr/bin/podman run --label="io.containers.autoupdate=image" --hostname=%N --name=%N --replace --detach --network=host -v /tmp/podman-agent.sock:/run/podman/podman.sock -v jenkins-agent-home:/home/jenkins:z -v jenkins-agent-home-agent:/home/jenkins/agent -v jenkins-agent-home-jenkins:/home/jenkins/.jenkins -e JENKINS_WEB_SOCKET=true --security-opt label=disable --init jenkins-agent:latest -workDir=/home/jenkins/agent -url http://your.jenkins.instance:port ${SECRET} Nodename
+ExecStart=/usr/bin/podman run \
+  --label="io.containers.autoupdate=image" \
+  --hostname=%N \
+  --name=%N \
+  --replace \
+  --detach \
+  --network=host \
+  -v /tmp/podman-agent.sock:/run/podman/podman.sock \
+  -v jenkins-agent-home:/home/jenkins:z \
+  -v jenkins-agent-home-agent:/home/jenkins/agent \
+  -v jenkins-agent-home-jenkins:/home/jenkins/.jenkins \
+  -e JENKINS_WEB_SOCKET=true \
+  --security-opt label=disable \
+  --init \
+  jenkins-agent:latest \
+  -workDir=/home/jenkins/agent \
+  -url http://your.jenkins.instance:port ${SECRET} Nodename
 ExecStop=/usr/bin/podman stop %N
 Type=forking
 
@@ -101,7 +117,23 @@ systemd:
         [Service]
         Environment=PODMAN_SYSTEMD_UNIT=%n
         Restart=on-failure
-        ExecStart=/usr/bin/podman run --label="io.containers.autoupdate=image" --hostname=%N --name=%N --replace --detach --network=host -v /tmp/podman-agent.sock:/run/podman/podman.sock -v jenkins-agent-home:/home/jenkins:z -v jenkins-agent-home-agent:/home/jenkins/agent -v jenkins-agent-home-jenkins:/home/jenkins/.jenkins -e JENKINS_WEB_SOCKET=true --security-opt label=disable --init jenkins-agent:latest -workDir=/home/jenkins/agent -url http://your.jenkins.instance:port ${SECRET} Nodename
+        ExecStart=/usr/bin/podman run \
+          --label="io.containers.autoupdate=image" \
+          --hostname=%N \
+          --name=%N \
+          --replace \
+          --detach \
+          --network=host \
+          -v /tmp/podman-agent.sock:/run/podman/podman.sock \
+          -v jenkins-agent-home:/home/jenkins:z \
+          -v jenkins-agent-home-agent:/home/jenkins/agent \
+          -v jenkins-agent-home-jenkins:/home/jenkins/.jenkins \
+          -e JENKINS_WEB_SOCKET=true \
+          --security-opt label=disable \
+          --init \
+          jenkins-agent:latest \
+          -workDir=/home/jenkins/agent \
+          -url http://your.jenkins.instance:port ${SECRET} Nodename
         ExecStop=/usr/bin/podman stop %N
         Type=forking
 
