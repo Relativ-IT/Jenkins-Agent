@@ -192,4 +192,4 @@ pipeline{
 
 ## Conclusion
 
-This image is building itself as you can suppose by looking at the `Containerfile` :relaxed:
+This image is building itself as you can suppose by looking at the `Jenkinsfile` :relaxed:
