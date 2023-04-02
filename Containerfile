@@ -6,8 +6,8 @@ USER root
 
 RUN apt-get update && apt-get install -y curl && apt-get clean
 RUN curl -LO https://github.com/containers/podman/releases/latest/download/${Binary}.tar.gz && \
-    tar -xvf ${Binary}.tar.gz && rm ${Binary}.tar.gz && \
-    mv ${Binary} /bin/podman && chmod +x /bin/podman && ln -s /bin/podman /bin/docker
+    tar -xvf ${Binary}.tar.gz -C / && rm ${Binary}.tar.gz && \
+    mv /bin/${Binary} /bin/podman && chmod +x /bin/podman
 
 VOLUME ["/home/jenkins/"]
 USER jenkins
