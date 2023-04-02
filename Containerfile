@@ -4,7 +4,7 @@ ENV CONTAINER_HOST=unix://run/podman/podman.sock
 USER root
 
 RUN apt-get update && apt-get install -y curl && apt-get clean
-COPY $PODMAN /bin/podman
+ADD $PODMAN /
 RUN chmod +x /bin/podman
 
 VOLUME ["/home/jenkins/"]
