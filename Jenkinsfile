@@ -12,6 +12,7 @@ pipeline {
     IMAGE = "jenkins-agent"
     TAG = "latest"
     FULLIMAGE = "${env.IMAGE}:${env.TAG}"
+    PODMAN_REMOTE = 'podman-remote-static-linux_amd64'
   }
 
   stages {
@@ -40,9 +41,30 @@ pipeline {
       }
     }
 
+    stage("Getting podman remote"){
+      parallel {
+        stage("Downloading podman remote") {
+          steps {
+            sh 'curl -LO https://github.com/containers/podman/releases/latest/download/$PODMAN_REMOTE.tar.gz'
+          }
+        }
+        stage("Dowloading Shasums") {
+          steps{
+            sh 'curl -LO https://github.com/containers/podman/releases/latest/download/shasums'
+          }
+        }
+      }
+    }
+
+    stage("Check download integrity") {
+      steps {
+        sh 'grep $PODMAN_REMOTE.tar.gz shasums | sha256sum --check'
+      }
+    }
+
     stage('Building image') {
       steps {
-        sh 'podman build --pull -t $REGISTRY/$FULLIMAGE .'
+        sh 'podman build --pull --build-arg PODMAN=$PODMAN_REMOTE -t $REGISTRY/$FULLIMAGE .'
       }
     }
 
