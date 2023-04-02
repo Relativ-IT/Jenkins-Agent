@@ -13,7 +13,6 @@ pipeline {
     TAG = "latest"
     FULLIMAGE = "${env.IMAGE}:${env.TAG}"
     PODMAN_REMOTE = "podman-remote-static-linux_amd64"
-    PODMAN_REMOTE_ARCHIVE = "${env.PODMAN_REMOTE}.tar.gz"
   }
 
   stages {
@@ -67,7 +66,7 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh 'podman build --pull --build-arg PODMAN_ARCHIVE=$PODMAN_REMOTE_ARCHIVE --build-arg PODMAN=$PODMAN_REMOTE -t $REGISTRY/$FULLIMAGE .'
+        sh 'podman build --pull --build-arg PODMAN_REMOTE=$PODMAN_REMOTE -t $REGISTRY/$FULLIMAGE .'
       }
     }
 
