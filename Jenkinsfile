@@ -59,7 +59,7 @@ pipeline {
     stage("Check download integrity") {
       steps {
         sh '''
-          grep $PODMAN_REMOTE shasums | sha256sum --check
+          grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
         '''
       }
     }
