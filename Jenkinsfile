@@ -8,7 +8,6 @@ pipeline {
   }
 
   environment{
-    REGISTRY = credentials('registry-server')
     IMAGE = "jenkins-agent"
     TAG = "latest"
     FULLIMAGE = "${env.IMAGE}:${env.TAG}"
@@ -65,13 +64,13 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $REGISTRY/$FULLIMAGE .'
+        sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $LOCAL_REGISTRY/$FULLIMAGE .'
       }
     }
 
     stage('Pushing image') {
       steps {
-        sh 'podman push $REGISTRY/$FULLIMAGE'
+        sh 'podman push $LOCAL_REGISTRY/$FULLIMAGE'
       }
     }
   }
