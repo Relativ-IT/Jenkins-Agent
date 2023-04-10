@@ -13,6 +13,7 @@ pipeline {
     TAG = "latest"
     FULLIMAGE = "${env.IMAGE}:${env.TAG}"
     PODMAN_REMOTE_ARCHIVE = "podman-remote-static-linux_amd64.tar.gz"
+    PODMAN_GITHUB_URL = "https://github.com/containers/podman/releases/latest/download" //without trailing '/'
   }
 
   stages {
@@ -45,12 +46,12 @@ pipeline {
       parallel {
         stage("Downloading podman remote") {
           steps {
-            sh 'curl -LO https://github.com/containers/podman/releases/latest/download/$PODMAN_REMOTE_ARCHIVE'
+            sh 'curl -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE'
           }
         }
         stage("Downloading Shasums") {
           steps{
-            sh 'curl -LO https://github.com/containers/podman/releases/latest/download/shasums'
+            sh 'curl -LO $PODMAN_GITHUB_URL/shasums'
           }
         }
       }
@@ -58,9 +59,7 @@ pipeline {
 
     stage("Check download integrity") {
       steps {
-        sh '''
-          grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
-        '''
+        sh 'grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check'
       }
     }
 
