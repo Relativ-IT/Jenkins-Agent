@@ -85,10 +85,6 @@ pipeline {
     }
     
     cleanup {
-      sh '''
-        podman container prune --force
-        podman image prune --force
-      '''
       cleanWs()
     }
   }
