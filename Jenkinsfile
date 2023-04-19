@@ -62,20 +62,9 @@ pipeline {
       }
     }
 
-    stage("Untar file") {
-      steps {
-        sh '''
-          tar -xf $PODMAN_REMOTE_ARCHIVE --transform 's?.*/??g'
-        '''
-      }
-    }
-
     stage('Building image') {
       steps {
-        sh '''
-          PODMAN_REMOTE=$(tar -tf $PODMAN_REMOTE_ARCHIVE --transform 's?.*/??g')
-          podman build --pull --build-arg PODMAN_REMOTE=$PODMAN_REMOTE -t $LOCAL_REGISTRY/$FULLIMAGE .
-        '''
+        sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $LOCAL_REGISTRY/$FULLIMAGE .'
       }
     }
 
