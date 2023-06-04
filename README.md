@@ -85,7 +85,7 @@ For further reading or inspiration or Reverse engineering ^^ how I went here you
 
 ``` yaml
 variant: fcos
-version: 1.4.0
+version: 1.5.0
 
 systemd:
   units:
@@ -185,7 +185,9 @@ pipeline{
     stage('test podman'){
       steps {
         sh '''
-            podman run --rm docker.io/alpine:latest df -h
+          podman version
+          podman system info
+          podman run --rm docker.io/alpine:latest df -h
         '''
       }
     }
