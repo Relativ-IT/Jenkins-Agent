@@ -8,7 +8,7 @@ USER root
 COPY ${PODMAN_REMOTE_ARCHIVE} ${PODMAN_REMOTE_ARCHIVE}
 
 RUN tar -xf ${PODMAN_REMOTE_ARCHIVE} --directory / && \
-    mv /$(tar --list -f ${PODMAN_REMOTE_ARCHIVE}) /bin/podman && \
+    mv /$(tar -tf ${PODMAN_REMOTE_ARCHIVE}) /bin/podman && \
     rm ${PODMAN_REMOTE_ARCHIVE}
 
 VOLUME ["/home/jenkins/"]
