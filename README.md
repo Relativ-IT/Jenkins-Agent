@@ -153,20 +153,23 @@ You should be able to see your agent connected on its status page on Jenkins
 
 - Check with `sudo systemctl status jenkins-agent.service podman.socket` if status are `active (running)` and `active (listening)`
 - Check with `sudo podman ps` if your container is up and running
-- Check with `sudo podman exec jenkins-agent podman system info` if you can see infos like e.g. :
+- Check with `sudo podman exec jenkins-agent podman version` if you can see infos like e.g. :
 
 ``` text
-host:
-[...]
-  distribution:
-    distribution: fedora
-    variant: coreos
-    version: "36"
-[...]
-  remoteSocket:
-    exists: true
-    path: /tmp/podman-agent.sock
-[...]
+Client:       Podman Engine
+Version:      4.5.1
+API Version:  4.5.1
+Go Version:   go1.20.4
+Git Commit:   9eef30051c83f62816a1772a743e5f1271b196d7
+Built:        Fri May 26 17:06:52 2023
+OS/Arch:      linux/amd64
+
+Server:       Podman Engine
+Version:      4.5.0
+API Version:  4.5.0
+Go Version:   go1.20.2
+Built:        Fri Apr 14 15:42:22 2023
+OS/Arch:      linux/amd64
 ```
 
 Create a new test job in jenkins like that and make it run on your new agent :
