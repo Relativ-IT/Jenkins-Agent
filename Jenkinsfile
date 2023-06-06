@@ -42,23 +42,12 @@ pipeline {
     }
 
     stage("Getting podman remote"){
-      parallel {
-        stage("Downloading podman remote") {
-          steps {
-            sh 'curl -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE'
-          }
-        }
-        stage("Downloading Shasums") {
-          steps{
-            sh 'curl -LO $PODMAN_GITHUB_URL/shasums'
-          }
-        }
-      }
-    }
-
-    stage("Check download integrity") {
+      options {retry(3)}
       steps {
-        sh 'grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check'
+        sh '''
+          curl --parallel -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE -LO $PODMAN_GITHUB_URL/shasums
+          grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
+        '''
       }
     }
 
