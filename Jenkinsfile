@@ -53,13 +53,13 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $LOCAL_REGISTRY/$FULLIMAGE .'
+        sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $REGISTRY_LOCAL/$FULLIMAGE .'
       }
     }
 
     stage('Pushing image') {
       steps {
-        sh 'podman push $LOCAL_REGISTRY/$FULLIMAGE'
+        sh 'podman push $REGISTRY_LOCAL/$FULLIMAGE'
       }
     }
   }
