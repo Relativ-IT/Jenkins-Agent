@@ -65,6 +65,9 @@ pipeline {
   }
 
   post {
+    always {
+      publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+    }
     success {
       slackSend color: "#4675b1", message: "${env.JOB_NAME} successfully built :blue_heart: !"
     }
