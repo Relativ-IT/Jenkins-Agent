@@ -77,7 +77,7 @@ Type=forking
 WantedBy=multi-user.target
 ```
 
-you can notice the `-v /tmp/podman-agent.sock:/run/podman/podman.sock` that will be driven by the `podman-remote-static` downloaded in Dockerfile and moved to `/bin/podman`
+you can notice the `-v /tmp/podman-agent.sock:/run/podman/podman.sock` that will be driven by the `podman-remote-static` downloaded in Containerfile and moved to `/bin/podman`
 
 For further reading or inspiration or Reverse engineering ^^ how I went here you can look at the `notes.md` file
 
