@@ -18,7 +18,7 @@ pipeline {
   stages {
     stage('Initialize') {
       parallel {
-        stage('Advertising start of build'){
+        stage('Advertising start of build') {
           steps{
             slackSend color: "#4675b1", message: "${env.JOB_NAME} build #${env.BUILD_NUMBER} started :fire: (<${env.RUN_DISPLAY_URL}|Open>)"
           }
@@ -41,7 +41,7 @@ pipeline {
       }
     }
 
-    stage("Getting podman remote"){
+    stage("Getting podman remote") {
       options {retry(3)}
       steps {
         sh '''
@@ -54,6 +54,12 @@ pipeline {
     stage('Building image') {
       steps {
         sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $REGISTRY_LOCAL/$FULLIMAGE .'
+      }
+    }
+
+    stage('Testing image') {
+      steps {
+        sh 'podman run -t --rm --security-opt label=disable --image-volume ignore --volumes-from $HOSTNAME --entrypoint '["podman","version"]' $REGISTRY_LOCAL/$FULLIMAGE'
       }
     }
 
