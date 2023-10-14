@@ -59,7 +59,7 @@ pipeline {
 
     stage('Testing image') {
       steps {
-        sh 'podman run -t --rm --security-opt label=disable --image-volume ignore --volumes-from $HOSTNAME --entrypoint \'["podman","version"]\' $REGISTRY_LOCAL/$FULLIMAGE'
+        sh 'podman run --rm --security-opt label=disable --image-volume ignore --volumes-from $HOSTNAME --entrypoint \'["podman","version"]\' $REGISTRY_LOCAL/$FULLIMAGE'
       }
     }
 
