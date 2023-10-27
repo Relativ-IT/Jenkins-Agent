@@ -45,7 +45,9 @@ pipeline {
       options {retry(3)}
       steps {
         sh '''
-          curl --parallel -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE -LO $PODMAN_GITHUB_URL/shasums
+          curl --parallel \
+            -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE \
+            -LO $PODMAN_GITHUB_URL/shasums
           grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
         '''
       }
@@ -53,13 +55,26 @@ pipeline {
 
     stage('Building image') {
       steps {
-        sh 'podman build --pull --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE -t $REGISTRY_LOCAL/$FULLIMAGE .'
+        sh '''
+          podman build \
+            --pull \
+            --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
+            --tag $REGISTRY_LOCAL/$FULLIMAGE .
+        '''
       }
     }
 
     stage('Testing image') {
       steps {
-        sh 'podman run --rm --security-opt label=disable --image-volume ignore --volumes-from $HOSTNAME --entrypoint \'["podman","version"]\' $REGISTRY_LOCAL/$FULLIMAGE'
+        sh '''
+          podman run \
+            --rm \
+            --security-opt label=disable \
+            --image-volume ignore \
+            --volumes-from $HOSTNAME \
+            --entrypoint \'["podman","version"]\' \
+            $REGISTRY_LOCAL/$FULLIMAGE
+        '''
       }
     }
 
