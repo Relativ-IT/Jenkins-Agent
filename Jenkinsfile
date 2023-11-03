@@ -59,7 +59,8 @@ pipeline {
           podman build \
             --pull \
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
-            --tag $REGISTRY_LOCAL/$FULLIMAGE .
+            --tag $REGISTRY_LOCAL/$FULLIMAGE \
+            .
         '''
       }
     }
