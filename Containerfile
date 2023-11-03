@@ -5,7 +5,7 @@ ARG PODMAN_REMOTE_ARCHIVE
 
 USER root
 
-RUN apt-get update && apt-get install jq -y && apt-get clean
+RUN apt-get update && apt-get install jq gpg -y && apt-get clean
 
 COPY ${PODMAN_REMOTE_ARCHIVE} ${PODMAN_REMOTE_ARCHIVE}
 
