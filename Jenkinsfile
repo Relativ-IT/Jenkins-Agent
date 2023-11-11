@@ -45,7 +45,7 @@ pipeline {
       options {retry(3)}
       steps {
         sh '''
-          curl --parallel \
+          curl --parallel --no-progress-meter \
             -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE \
             -LO $PODMAN_GITHUB_URL/shasums
           grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
