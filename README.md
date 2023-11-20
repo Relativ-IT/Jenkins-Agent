@@ -69,7 +69,9 @@ ExecStart=/usr/bin/podman run \
   --init \
   jenkins-agent:latest \
   -workDir=/home/jenkins/agent \
-  -url http://your.jenkins.instance:port ${SECRET} Nodename
+  -url http://your.jenkins.instance:port \
+  -secret ${SECRET} \
+  -name Nodename
 ExecStop=/usr/bin/podman stop %N
 Type=forking
 
