@@ -1,4 +1,4 @@
-FROM docker.io/jenkins/inbound-agent:latest-jdk17
+FROM docker.io/jenkins/inbound-agent:latest
 
 ENV CONTAINER_HOST=unix://run/podman/podman.sock
 ARG PODMAN_REMOTE_ARCHIVE
