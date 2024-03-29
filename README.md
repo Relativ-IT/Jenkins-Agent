@@ -1,6 +1,6 @@
 # Jenkins-Agent
 
-A containerized jenkins agent based on the official [Docker Inbound Agent](https://github.com/jenkinsci/docker-inbound-agent) from [Jenkinsci](https://github.com/jenkinsci) that allow you to use Podman out of Podman.
+A containerized jenkins agent based on the official [Docker Inbound Agent](https://github.com/jenkinsci/docker-agent) from [Jenkinsci](https://github.com/jenkinsci) that allow you to use Podman out of Podman.
 
 The first intent of this image is to provide the ability to use Podman from a containerized Jenkins agent, I've choosen the Poop :poop: :innocent: (Podman out of Podman) method that let me drive podman via its host socket.
 
