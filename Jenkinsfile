@@ -57,7 +57,7 @@ pipeline {
       steps {
         sh '''
           podman build \
-            --pull \
+            --pull=newer \
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
             --tag $REGISTRY_LOCAL/$FULLIMAGE \
             .
