@@ -57,6 +57,7 @@ pipeline {
       steps {
         sh '''
           podman build \
+            --network slirp4netns \
             --pull=newer \
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
             --tag $REGISTRY_LOCAL/$FULLIMAGE \
