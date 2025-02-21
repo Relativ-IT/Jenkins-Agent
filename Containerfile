@@ -5,7 +5,7 @@ ARG PODMAN_REMOTE_ARCHIVE
 
 USER root
 
-RUN apt-get update && apt-get install --no-install-recommends -y jq gpg && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --no-install-recommends -y jq gpg gpg-agent && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY ${PODMAN_REMOTE_ARCHIVE} ${PODMAN_REMOTE_ARCHIVE}
 
