@@ -1,0 +1,8 @@
+FROM docker.io/jenkins/inbound-agent:latest-rhel-ubi9-jdk21
+
+USER root
+
+RUN dnf install -y jq buildah && dnf clean all
+
+VOLUME ["/home/jenkins/"]
+USER jenkins

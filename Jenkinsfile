@@ -4,13 +4,15 @@ pipeline {
   }
 
   agent {
-    label 'Linux && Podman'
+    label 'Linux && Buildah'
   }
 
   environment{
-    IMAGE = "jenkins-agent"
+    IMAGE_PODMAN = "jenkins-agent-podman"
+    IMAGE_BUILDAH = "jenkins-agent-buildah"
     TAG = "latest"
-    FULLIMAGE = "${env.IMAGE}:${env.TAG}"
+    FULLIMAGE_PODMAN = "${env.IMAGE_PODMAN}:${env.TAG}"
+    FULLIMAGE_BUILDAH = "${env.BUILDAH}:${env.TAG}"
     PODMAN_REMOTE_ARCHIVE = "podman-remote-static-linux_amd64.tar.gz"
     PODMAN_GITHUB_URL = "https://github.com/containers/podman/releases/latest/download" //without trailing '/'
   }
@@ -29,15 +31,6 @@ pipeline {
             sh 'printenv | sort'
           }
         }
-
-        stage('Print Podman infos') {
-          steps {
-            sh '''
-              podman version
-              podman system info
-            '''
-          }
-        }
       }
     }
 
@@ -53,36 +46,42 @@ pipeline {
       }
     }
 
-    stage('Building image') {
+    stage('Building images') {
       steps {
         sh '''
-          podman build \
-            --network slirp4netns \
+          buildah build \
             --pull=newer \
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
-            --tag $REGISTRY_LOCAL/$FULLIMAGE \
-            .
+            --tag $REGISTRY_LOCAL/$FULLIMAGE_PODMAN \
+            -f Containerfile-podman
+        '''
+        sh '''
+          buildah build \
+            --pull=newer \
+            --tag $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH \
+            -f Containerfile-buildah
         '''
       }
     }
 
-    stage('Testing image') {
-      steps {
-        sh '''
-          podman run \
-            --rm \
-            --security-opt label=disable \
-            --image-volume ignore \
-            --volumes-from $HOSTNAME \
-            --entrypoint \'["podman","version"]\' \
-            $REGISTRY_LOCAL/$FULLIMAGE
-        '''
-      }
-    }
+    // stage('Testing image') {
+    //   steps {
+    //     sh '''
+    //       podman run \
+    //         --rm \
+    //         --security-opt label=disable \
+    //         --image-volume ignore \
+    //         --volumes-from $HOSTNAME \
+    //         --entrypoint \'["podman","version"]\' \
+    //         $REGISTRY_LOCAL/$FULLIMAGE
+    //     '''
+    //   }
+    // }
 
     stage('Pushing image') {
       steps {
-        sh 'podman push $REGISTRY_LOCAL/$FULLIMAGE'
+        sh 'buildah push $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH'
+        sh 'buildah push $REGISTRY_LOCAL/$FULLIMAGE_PODMAN'
       }
     }
   }
