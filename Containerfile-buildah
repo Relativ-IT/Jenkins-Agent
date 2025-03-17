@@ -2,7 +2,14 @@ FROM docker.io/jenkins/inbound-agent:latest-rhel-ubi9-jdk21
 
 USER root
 
-RUN dnf install -y jq buildah && dnf clean all
+ARG SELF_SIGNED_CERT_URL
+ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
+
+RUN update-ca-trust && \
+    dnf install -y jq buildah fuse-overlayfs && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf && \
+    sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
 
 VOLUME ["/home/jenkins/"]
 USER jenkins

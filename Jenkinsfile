@@ -12,7 +12,7 @@ pipeline {
     IMAGE_BUILDAH = "jenkins-agent-buildah"
     TAG = "latest"
     FULLIMAGE_PODMAN = "${env.IMAGE_PODMAN}:${env.TAG}"
-    FULLIMAGE_BUILDAH = "${env.BUILDAH}:${env.TAG}"
+    FULLIMAGE_BUILDAH = "${env.IMAGE_BUILDAH}:${env.TAG}"
     PODMAN_REMOTE_ARCHIVE = "podman-remote-static-linux_amd64.tar.gz"
     PODMAN_GITHUB_URL = "https://github.com/containers/podman/releases/latest/download" //without trailing '/'
   }
@@ -58,25 +58,12 @@ pipeline {
         sh '''
           buildah build \
             --pull=newer \
+            --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH \
             -f Containerfile-buildah
         '''
       }
     }
-
-    // stage('Testing image') {
-    //   steps {
-    //     sh '''
-    //       podman run \
-    //         --rm \
-    //         --security-opt label=disable \
-    //         --image-volume ignore \
-    //         --volumes-from $HOSTNAME \
-    //         --entrypoint \'["podman","version"]\' \
-    //         $REGISTRY_LOCAL/$FULLIMAGE
-    //     '''
-    //   }
-    // }
 
     stage('Pushing image') {
       steps {
