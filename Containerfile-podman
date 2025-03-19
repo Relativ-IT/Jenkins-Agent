@@ -9,7 +9,7 @@ ARG SELF_SIGNED_CERT_URL
 ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
 
 RUN update-ca-trust && \
-    dnf install -y jq gpg && \
+    dnf install -y jq && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
