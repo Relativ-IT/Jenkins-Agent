@@ -52,6 +52,7 @@ pipeline {
           buildah build \
             --pull=newer \
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
+            --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_PODMAN \
             -f Containerfile-podman
         '''

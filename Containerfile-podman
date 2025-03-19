@@ -1,11 +1,17 @@
-FROM docker.io/jenkins/inbound-agent:jdk21
+FROM docker.io/jenkins/inbound-agent:latest-rhel-ubi9-jdk21
 
 ENV CONTAINER_HOST=unix://run/podman/podman.sock
 ARG PODMAN_REMOTE_ARCHIVE
 
 USER root
 
-RUN apt-get update && apt-get install --no-install-recommends -y jq gpg gpg-agent && apt-get clean && rm -rf /var/lib/apt/lists/*
+ARG SELF_SIGNED_CERT_URL
+ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
+
+RUN update-ca-trust && \
+    dnf install -y jq gpg && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 COPY ${PODMAN_REMOTE_ARCHIVE} ${PODMAN_REMOTE_ARCHIVE}
 
