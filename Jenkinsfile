@@ -42,7 +42,7 @@ pipeline {
             sh 'printenv | sort'
           }
         }
-        stage('Print environments variables') {
+        stage('Get Fedora GPG') {
           steps {
             sh 'curl --no-progress-meter https://fedoraproject.org/fedora.gpg | gpg --import'
           }
