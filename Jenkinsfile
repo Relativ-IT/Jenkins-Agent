@@ -22,10 +22,10 @@ pipeline {
     PODMAN_GITHUB_URL = "https://github.com/containers/podman/releases/latest/download"
 
     IGNITION_GITHUB_URL = "https://github.com/coreos/ignition/releases/latest/download"
-    IGNITION_FILE = "butane-x86_64-unknown-linux-gnu"
+    IGNITION_FILE = "ignition-validate-x86_64-linux"
 
     BUTANE_GITHUB_URL = "https://github.com/coreos/butane/releases/latest/download"
-    BUTANE_FILE = "ignition-validate-x86_64-linux"
+    BUTANE_FILE = "butane-x86_64-unknown-linux-gnu"
   }
 
   stages {
