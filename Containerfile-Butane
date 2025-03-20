@@ -11,11 +11,7 @@ ARG IGNITION_FILE
 COPY ${IGNITION_FILE} /usr/bin/ignition_validate
 
 RUN update-ca-trust && \
-    chmod +x /usr/bin/butane /usr/bin/ignition_validate && \
-    dnf install -y jq buildah fuse-overlayfs && \
-    dnf clean all && \
-    rm -rf /var/cache/dnf && \
-    sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
+    chmod +x /usr/bin/butane /usr/bin/ignition_validate
 
 VOLUME ["/home/jenkins/"]
 USER jenkins
