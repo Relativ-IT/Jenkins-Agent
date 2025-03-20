@@ -1,4 +1,4 @@
-FROM docker.io/jenkins/inbound-agent:latest-rhel-ubi9-jdk21
+FROM docker.io/jenkins/inbound-agent:rhel-ubi9-jdk21
 
 USER root
 
