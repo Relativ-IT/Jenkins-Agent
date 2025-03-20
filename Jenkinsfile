@@ -60,7 +60,7 @@ pipeline {
             -LO $BUTANE_GITHUB_URL/$BUTANE_FILE \
             -LO $BUTANE_GITHUB_URL/$BUTANE_FILE.asc \
             -LO $IGNITION_GITHUB_URL/$IGNITION_FILE \
-            -LO $IGNITION_GITHUB_URL/$IGNITION_FILE.asc \
+            -LO $IGNITION_GITHUB_URL/$IGNITION_FILE.asc
           grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
           gpg --verify $BUTANE_FILE.asc $BUTANE_FILE
           gpg --verify $IGNITION_FILE.asc $IGNITION_FILE
