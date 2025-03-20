@@ -10,11 +10,22 @@ pipeline {
   environment{
     IMAGE_PODMAN = "jenkins-agent-podman"
     IMAGE_BUILDAH = "jenkins-agent-buildah"
+    IMAGE_BUTANE = "jenkins-agent-butane"
+
     TAG = "latest"
+
     FULLIMAGE_PODMAN = "${env.IMAGE_PODMAN}:${env.TAG}"
     FULLIMAGE_BUILDAH = "${env.IMAGE_BUILDAH}:${env.TAG}"
+    FULLIMAGE_BUTANE = "${env.IMAGE_BUTANE}:${env.TAG}"
+
     PODMAN_REMOTE_ARCHIVE = "podman-remote-static-linux_amd64.tar.gz"
-    PODMAN_GITHUB_URL = "https://github.com/containers/podman/releases/latest/download" //without trailing '/'
+    PODMAN_GITHUB_URL = "https://github.com/containers/podman/releases/latest/download"
+
+    IGNITION_GITHUB_URL = "https://github.com/coreos/ignition/releases/latest/download"
+    IGNITION_FILE = "butane-x86_64-unknown-linux-gnu"
+
+    BUTANE_GITHUB_URL = "https://github.com/coreos/butane/releases/latest/download"
+    BUTANE_FILE = "ignition-validate-x86_64-linux"
   }
 
   stages {
@@ -31,17 +42,28 @@ pipeline {
             sh 'printenv | sort'
           }
         }
+        stage('Print environments variables') {
+          steps {
+            sh 'curl --no-progress-meter https://fedoraproject.org/fedora.gpg | gpg --import'
+          }
+        }
       }
     }
 
-    stage("Getting podman remote") {
+    stage("Getting Artefacts") {
       options {retry(3)}
       steps {
         sh '''
           curl --parallel --no-progress-meter \
             -LO $PODMAN_GITHUB_URL/$PODMAN_REMOTE_ARCHIVE \
-            -LO $PODMAN_GITHUB_URL/shasums
+            -LO $PODMAN_GITHUB_URL/shasums \
+            -LO $BUTANE_GITHUB_URL/$BUTANE_FILE \
+            -LO $BUTANE_GITHUB_URL/$BUTANE_FILE.asc \
+            -LO $IGNITION_GITHUB_URL/$IGNITION_FILE \
+            -LO $IGNITION_GITHUB_URL/$IGNITION_FILE.asc \
           grep $PODMAN_REMOTE_ARCHIVE shasums | sha256sum --check
+          gpg --verify $BUTANE_FILE.asc $BUTANE_FILE
+          gpg --verify $IGNITION_FILE.asc $IGNITION_FILE
         '''
       }
     }
@@ -54,14 +76,23 @@ pipeline {
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
             --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_PODMAN \
-            -f Containerfile-podman
+            -f Containerfile-Podman
         '''
         sh '''
           buildah build \
             --pull=newer \
             --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH \
-            -f Containerfile-buildah
+            -f Containerfile-Buildah
+        '''
+        sh '''
+          buildah build \
+            --pull=newer \
+            --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
+            --build-arg IGNITION_FILE=$IGNITION_FILE \
+            --build-arg BUTANE_FILE=$BUTANE_FILE \
+            --tag $REGISTRY_LOCAL/$FULLIMAGE_BUTANE \
+            -f Containerfile-Butane
         '''
       }
     }
@@ -70,6 +101,7 @@ pipeline {
       steps {
         sh 'buildah push $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH'
         sh 'buildah push $REGISTRY_LOCAL/$FULLIMAGE_PODMAN'
+        sh 'buildah push $REGISTRY_LOCAL/$FULLIMAGE_BUTANE'
       }
     }
   }

@@ -1,0 +1,21 @@
+FROM docker.io/jenkins/inbound-agent:latest-rhel-ubi9-jdk21
+
+USER root
+
+ARG SELF_SIGNED_CERT_URL
+ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
+
+ARG BUTANE_FILE
+COPY ${BUTANE_FILE} /usr/bin/butane
+ARG IGNITION_FILE
+COPY ${IGNITION_FILE} /usr/bin/ignition_validate
+
+RUN update-ca-trust && \
+    chmod +x /usr/bin/butane /usr/bin/ignition_validate && \
+    dnf install -y jq buildah fuse-overlayfs && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf && \
+    sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
+
+VOLUME ["/home/jenkins/"]
+USER jenkins
