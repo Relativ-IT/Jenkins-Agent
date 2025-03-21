@@ -42,6 +42,16 @@ pipeline {
             sh 'printenv | sort'
           }
         }
+
+        stage('Print Buildah infos') {
+          steps {
+            sh '''
+              buildah version
+              buildah info
+            '''
+          }
+        }
+        
         stage('Get Fedora GPG') {
           steps {
             sh 'curl --no-progress-meter https://fedoraproject.org/fedora.gpg | gpg --import'
