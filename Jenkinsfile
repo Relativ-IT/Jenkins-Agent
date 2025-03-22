@@ -86,14 +86,14 @@ pipeline {
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \
             --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_PODMAN \
-            -f Containerfile-Podman
+            -f Containerfile.Podman
         '''
         sh '''
           buildah build \
             --pull=newer \
             --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH \
-            -f Containerfile-Buildah
+            -f Containerfile.Buildah
         '''
         sh '''
           buildah build \
@@ -102,7 +102,7 @@ pipeline {
             --build-arg IGNITION_FILE=$IGNITION_FILE \
             --build-arg BUTANE_FILE=$BUTANE_FILE \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_BUTANE \
-            -f Containerfile-Butane
+            -f Containerfile.Butane
         '''
       }
     }
