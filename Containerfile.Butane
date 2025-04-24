@@ -11,7 +11,10 @@ ARG IGNITION_FILE
 COPY ${IGNITION_FILE} /usr/bin/ignition_validate
 
 RUN update-ca-trust && \
-    chmod +x /usr/bin/butane /usr/bin/ignition_validate
+    chmod +x /usr/bin/butane /usr/bin/ignition_validate && \
+    dnf install -y --nodocs --setopt install_weak_deps=false jq && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 VOLUME ["/home/jenkins/"]
 USER jenkins
