@@ -2,14 +2,14 @@ FROM docker.io/jenkins/inbound-agent:rhel-ubi9-jdk21
 
 USER root
 
+ARG PODMAN_REMOTE_ARCHIVE
 ARG SELF_SIGNED_CERT_URL
 ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
 
 ENV CONTAINER_HOST=unix://run/podman/podman.sock
-ARG PODMAN_REMOTE_ARCHIVE
 
 RUN update-ca-trust && \
-    dnf install -y jq && \
+    dnf install -y --nodocs --setopt install_weak_deps=false jq && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 

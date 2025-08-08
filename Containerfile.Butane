@@ -2,19 +2,20 @@ FROM docker.io/jenkins/inbound-agent:rhel-ubi9-jdk21
 
 USER root
 
+ARG IGNITION_FILE
+ARG BUTANE_FILE
 ARG SELF_SIGNED_CERT_URL
 ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
 
-ARG BUTANE_FILE
-COPY ${BUTANE_FILE} /usr/bin/butane
-ARG IGNITION_FILE
-COPY ${IGNITION_FILE} /usr/bin/ignition_validate
-
 RUN update-ca-trust && \
-    chmod +x /usr/bin/butane /usr/bin/ignition_validate && \
     dnf install -y --nodocs --setopt install_weak_deps=false jq && \
     dnf clean all && \
     rm -rf /var/cache/dnf
+
+COPY ${BUTANE_FILE} /usr/bin/butane
+COPY ${IGNITION_FILE} /usr/bin/ignition_validate
+
+RUN chmod +x /usr/bin/butane /usr/bin/ignition_validate
 
 VOLUME ["/home/jenkins/"]
 USER jenkins
