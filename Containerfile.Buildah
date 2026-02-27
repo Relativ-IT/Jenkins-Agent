@@ -3,7 +3,9 @@ FROM docker.io/jenkins/inbound-agent:rhel-ubi9-jdk25
 USER root
 
 ARG SELF_SIGNED_CERT_URL
+ARG MIRRORS_CONF_FILE
 ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
+ADD ${MIRRORS_CONF_FILE} /etc/containers/registries.conf.d/mirrors.conf
 
 RUN update-ca-trust && \
     dnf install -y --nodocs --setopt install_weak_deps=false jq buildah fuse-overlayfs && \

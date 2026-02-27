@@ -89,6 +89,7 @@ pipeline {
             -f Containerfile.Podman
         '''
         sh '''
+          envsubst < mirrors.conf.template > mirrors.conf
           buildah build \
             --pull=newer \
             --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \

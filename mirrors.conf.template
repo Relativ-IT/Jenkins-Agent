@@ -1,0 +1,19 @@
+[[registry]]
+prefix = "docker.io"
+location = "$REGISTRY_LOCAL/docker-io"
+
+[[registry]]
+prefix = "quay.io"
+location = "$REGISTRY_LOCAL/quay-io"
+
+[[registry]]
+prefix = "registry.k8s.io"
+location = "$REGISTRY_LOCAL/k8s-io"
+
+[[registry]]
+prefix = "ghcr.io"
+location = "$REGISTRY_LOCAL/ghcr-io"
+
+[[registry]]
+prefix = "dock.mau.dev"
+location = "$REGISTRY_LOCAL/dock-mau-dev"
