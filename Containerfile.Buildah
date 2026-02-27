@@ -5,15 +5,13 @@ USER root
 ARG SELF_SIGNED_CERT_URL
 ARG MIRRORS_CONF_FILE
 ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
-ADD ${MIRRORS_CONF_FILE} /tmp/mirrors.conf.template
+ADD ${MIRRORS_CONF_FILE} /etc/containers/registries.conf.d/mirrors.conf
 
 RUN update-ca-trust && \
     dnf install -y --nodocs --setopt install_weak_deps=false jq buildah gettext fuse-overlayfs && \
     dnf clean all && \
     rm -rf /var/cache/dnf && \
-    sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf && \
-    envsubst < /tmp/mirrors.conf.template > /etc/containers/registries.conf.d/mirrors.conf && \
-    rm -f /tmp/mirrors.conf.template
+    sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
 
 VOLUME ["/home/jenkins/"]
 USER jenkins

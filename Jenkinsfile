@@ -89,10 +89,11 @@ pipeline {
             -f Containerfile.Podman
         '''
         sh '''
+          envsubst < mirrors.conf.template > mirrors.conf
           buildah build \
             --pull=newer \
             --build-arg SELF_SIGNED_CERT_URL=$SELF_CA_CERT_URL \
-            --build-arg MIRRORS_CONF_FILE=mirrors.conf.template \
+            --build-arg MIRRORS_CONF_FILE=mirrors.conf \
             --tag $REGISTRY_LOCAL/$FULLIMAGE_BUILDAH \
             -f Containerfile.Buildah
         '''
