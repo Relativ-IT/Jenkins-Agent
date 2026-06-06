@@ -81,6 +81,7 @@ pipeline {
     stage('Building images') {
       steps {
         sh '''
+          envsubst < mirrors.conf.template > mirrors.conf
           buildah build \
             --pull=newer \
             --build-arg PODMAN_REMOTE_ARCHIVE=$PODMAN_REMOTE_ARCHIVE \

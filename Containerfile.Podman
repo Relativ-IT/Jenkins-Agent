@@ -5,6 +5,7 @@ USER root
 ARG PODMAN_REMOTE_ARCHIVE
 ARG SELF_SIGNED_CERT_URL
 ADD ${SELF_SIGNED_CERT_URL} /etc/pki/ca-trust/source/anchors/RelativIT.crt
+ADD ${MIRRORS_CONF_FILE} /etc/containers/registries.conf.d/mirrors.conf
 
 ENV CONTAINER_HOST=unix://run/podman/podman.sock
 
